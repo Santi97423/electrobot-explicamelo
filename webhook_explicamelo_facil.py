@@ -1,100 +1,43 @@
 from flask import Flask, request, jsonify
-import re
 
 app = Flask(__name__)
 
-print("🎓 MODO EXPLÍCAMELO FÁCIL - Activado (PEP 2016-2025)")
+print("🎓 MODO EXPLÍCAMELO FÁCIL - Iniciado")
 
-# ==================== BASE DE CONOCIMIENTO ESPECIALIZADA ====================
-explicaciones_faciles = {
-    "concebir_cdio": {
-        "preguntas": ["qué es concebir en cdio", "fase concebir", "concebir cdio"],
-        "respuesta": "🧠 **CONCEBIR en CDIO - Explicado Fácil**\n\nEs la fase donde **piensas y planeas** como ingeniero. Es como cuando quieres construir una casa y primero:\n\n• 🤔 **Identificas el problema**: ¿Qué necesitan las personas?\n• 📋 **Planeas los requisitos**: ¿Qué debe hacer el sistema?\n• 🎯 **Defines objetivos**: ¿Qué quieres lograr?\n• 🔍 **Investigas tecnologías**: ¿Qué herramientas usar?\n\n**Ejemplo real**: Antes de hacer un robot, piensas: '¿Para qué sirve? ¿Qué problemas resuelve? ¿Qué características debe tener?'"
-    },
-    
-    "diseñar_cdio": {
-        "preguntas": ["qué es diseñar en cdio", "fase diseñar", "diseñar cdio"],
-        "respuesta": "📐 **DISEÑAR en CDIO - Explicado Fácil**\n\nEs cuando **creas los planos detallados** de tu solución. Como un arquitecto que dibuja cada detalle de la casa:\n\n• ✏️ **Diseñas circuitos**: Diagramas y esquemas\n• 💻 **Planificas software**: Flujos y algoritmos\n• 📊 **Seleccionas componentes**: Qué resistencias, chips usar\n• 🎨 **Prototipas en papel**: Bocetos y modelos\n\n**Diferencia clave**: Concebir = QUÉ hacer, Diseñar = CÓMO hacerlo"
-    },
-    
-    "proyectos_cdio": {
-        "preguntas": ["proyectos cdio", "cómo son los proyectos cdio", "ejemplos proyectos cdio"],
-        "respuesta": "🛠️ **Proyectos CDIO - Explicado Fácil**\n\nSon proyectos **reales y progresivos** que haces durante la carrera:\n\n**Semestres 1-3**: Proyectos básicos\n• Ejemplo: 'Semáforo inteligente con Arduino'\n\n**Semestres 4-6**: Proyectos intermedios  \n• Ejemplo: 'Sistema de riego automático con sensores'\n\n**Semestres 7-10**: Proyectos complejos\n• Ejemplo: 'Robot de telepresencia para hospitales'\n\n**Ventaja**: Aprendes haciendo, no solo memorizando teoría."
-    },
-    
-    "sistemas_digitales": {
-        "preguntas": ["sistemas digitales", "línea sistemas digitales", "qué son sistemas digitales"],
-        "respuesta": "🔢 **Sistemas Digitales - Explicado Fácil**\n\nEs la línea donde aprendes a **crear sistemas que piensan en 0s y 1s**. Como enseñarle a las máquinas a tomar decisiones.\n\n**Qué aprenderás**:\n• 🎛️ Diseñar circuitos lógicos\n• 💾 Programar microcontroladores\n• 🤖 Crear sistemas embebidos\n• 📱 Desarrollar aplicaciones IoT\n\n**Salida laboral**: Desarrollador de hardware, diseñador de sistemas embebidos, especialista en IoT"
-    },
-    
-    "telecomunicaciones": {
-        "preguntas": ["telecomunicaciones", "línea telecomunicaciones", "qué son telecomunicaciones"],
-        "respuesta": "📡 **Telecomunicaciones - Explicado Fácil**\n\nEs la línea donde aprendes a **hacer que los dispositivos se comuniquen**. Como crear 'redes sociales' para máquinas.\n\n**Qué aprenderás**:\n• 🌐 Diseñar redes de comunicación\n• 📶 Trabajar con WiFi, Bluetooth, 5G\n• 🔒 Garantizar seguridad en comunicaciones\n• 📞 Desarrollar sistemas de transmisión\n\n**Salida laboral**: Ingeniero de telecomunicaciones, diseñador de redes, especialista en comunicaciones móviles"
-    },
-    
-    "automatizacion_control": {
-        "preguntas": ["automatización y control", "línea automatización", "qué es automatización"],
-        "respuesta": "🏭 **Automatización y Control - Explicado Fácil**\n\nEs la línea donde aprendes a **crear sistemas que funcionan solos**. Como darle 'cerebro' a las máquinas para que tomen decisiones automáticas.\n\n**Qué aprenderás**:\n• 🤖 Programar robots y brazos mecánicos\n• ⚙️ Diseñar sistemas de control industrial\n• 🔄 Crear procesos automatizados\n• 📊 Desarrollar sistemas SCADA\n\n**Salida laboral**: Ingeniero de automatización, especialista en control industrial, diseñador de sistemas robóticos"
-    },
-    
-    "creditos": {
-        "preguntas": ["créditos", "cuántos créditos", "qué son créditos académicos"],
-        "respuesta": "📊 **Sistema de Créditos - Explicado Fácil**\n\nLos créditos son como **'puntos de experiencia'** que ganas en tu formación:\n\n**Total carrera**: 160 créditos\n\n**Distribución**:\n• 🎯 Formación Profesional: 138 créditos (tu especialidad)\n• 🌟 Formación General: 6 créditos (visión amplia)\n• 💼 Formación de Facultad: 10 créditos (base ingenieril)\n• 👤 Formación Personal: 6 créditos (desarrollo humano)\n\n**En práctica**: 1 crédito ≈ 3 horas de trabajo semanal"
-    },
-    
-    "proyecto_grado": {
-        "preguntas": ["proyecto de grado", "trabajo de grado", "qué es proyecto grado"],
-        "respuesta": "🎓 **Proyecto de Grado - Explicado Fácil**\n\nEs tu **'examen final práctico'** donde demuestras todo lo aprendido. Como el jefe final de un videojuego.\n\n**Características**:\n• 🚀 Aplicas CDIO completo\n• 💼 Puede ser con empresa real\n• 👥 Usualmente en equipo\n• 📈 Resuelve problema real\n\n**Ejemplos recientes**:\n• 'Sistema de monitoreo para cultivos de aguacate'\n• 'Robot para asistencia en biblioteca'\n• 'App para control de energía en hogares'"
-    }
+# Base de conocimiento simple y directa
+explicaciones = {
+    "concebir": "🧠 **CONCEBIR en CDIO - Explicado Fácil**\n\nEs la fase donde PIENSAS y PLANEAS como ingeniero. Es como cuando quieres construir una casa y primero:\n\n• 🤔 Identificas el problema: ¿Qué necesitan las personas?\n• 📋 Planeas los requisitos: ¿Qué debe hacer el sistema?\n• 🎯 Defines objetivos: ¿Qué quieres lograr?\n• 🔍 Investigas tecnologías: ¿Qué herramientas usar?\n\n💡 **Ejemplo**: Antes de hacer un robot, piensas: '¿Para qué sirve? ¿Qué problemas resuelve?'",
+
+    "diseñar": "📐 **DISEÑAR en CDIO - Explicado Fácil**\n\nEs cuando CREAS LOS PLANOS detallados de tu solución:\n\n• ✏️ Diseñas circuitos y diagramas\n• 💻 Planificas software y algoritmos\n• 📊 Seleccionas componentes electrónicos\n• 🎨 Haces prototipos en papel\n\n🔧 **Diferencia clave**: Concebir = QUÉ hacer, Diseñar = CÓMO hacerlo",
+
+    "proyectos": "🛠️ **Proyectos CDIO - Explicado Fácil**\n\nSon proyectos REALES que haces durante la carrera:\n\n📅 **Semestres 1-3**: Proyectos básicos\n• Ejemplo: 'Semáforo inteligente con Arduino'\n\n📅 **Semestres 4-6**: Proyectos intermedios\n• Ejemplo: 'Sistema de riego automático'\n\n📅 **Semestres 7-10**: Proyectos complejos\n• Ejemplo: 'Robot para hospitales'\n\n✅ **Ventaja**: Aprendes haciendo, no solo memorizando.",
+
+    "sistemas_digitales": "🔢 **Sistemas Digitales - Explicado Fácil**\n\nAprendes a crear sistemas que piensan en CEROS y UNOS:\n\n• 🎛️ Diseñar circuitos lógicos\n• 💾 Programar microcontroladores\n• 🤖 Crear sistemas embebidos\n• 📱 Desarrollar aplicaciones IoT\n\n💼 **Salida laboral**: Desarrollador de hardware, especialista en IoT",
+
+    "telecomunicaciones": "📡 **Telecomunicaciones - Explicado Fácil**\n\nAprendes a hacer que los dispositivos SE COMUNIQUEN:\n\n• 🌐 Diseñar redes de comunicación\n• 📶 Trabajar con WiFi, Bluetooth, 5G\n• 🔒 Garantizar seguridad\n• 📞 Desarrollar sistemas de transmisión\n\n💼 **Salida laboral**: Ingeniero de telecomunicaciones, diseñador de redes",
+
+    "automatizacion": "🏭 **Automatización y Control - Explicado Fácil**\n\nAprendes a crear sistemas que FUNCIONAN SOLOS:\n\n• 🤖 Programar robots industriales\n• ⚙️ Diseñar control automático\n• 🔄 Crear procesos automatizados\n• 📊 Desarrollar sistemas SCADA\n\n💼 **Salida laboral**: Ingeniero de automatización, especialista en robótica",
+
+    "creditos": "📊 **Créditos Académicos - Explicado Fácil**\n\nSon como PUNTOS DE EXPERIENCIA en tu formación:\n\n🎯 **Total carrera**: 160 créditos\n\n📋 **Distribución**:\n• Formación Profesional: 138 créditos\n• Formación General: 6 créditos\n• Formación de Facultad: 10 créditos\n• Formación Personal: 6 créditos\n\n⏰ **En práctica**: 1 crédito ≈ 3 horas semanales",
+
+    "proyecto_grado": "🎓 **Proyecto de Grado - Explicado Fácil**\n\nEs tu EXAMEN FINAL PRÁCTICO:\n\n🚀 **Características**:\n• Aplicas CDIO completo\n• Puede ser con empresa real\n• Usualmente en equipo\n• Resuelve problema real\n\n📝 **Ejemplos**:\n• 'Sistema para cultivos de aguacate'\n• 'Robot para biblioteca'\n• 'App para control de energía'"
 }
-
-def detectar_tema_explicacion(pregunta):
-    """Detecta qué tema de explicación fácil se solicita"""
-    pregunta = pregunta.lower().strip()
-    
-    # Buscar en todas las explicaciones
-    for tema_id, contenido in explicaciones_faciles.items():
-        for keyword in contenido["preguntas"]:
-            if keyword in pregunta:
-                return tema_id
-    
-    # Búsqueda por palabras clave
-    keywords_secundarios = {
-        "concebir_cdio": ["concebir", "pensar", "planear"],
-        "diseñar_cdio": ["diseñar", "planos", "esquema"],
-        "proyectos_cdio": ["proyecto cdio", "proyecto integrador"],
-        "sistemas_digitales": ["digital", "microcontrolador", "embebido"],
-        "telecomunicaciones": ["telecom", "comunicación", "redes"],
-        "automatizacion_control": ["automatización", "control", "robot"],
-        "creditos": ["crédito", "créditos", "puntos"],
-        "proyecto_grado": ["proyecto grado", "trabajo grado"]
-    }
-    
-    for tema_id, palabras in keywords_secundarios.items():
-        for palabra in palabras:
-            if palabra in pregunta:
-                return tema_id
-    
-    return None
 
 @app.route("/", methods=["GET"])
 def home():
-    return jsonify({
-        "message": "🎓 Modo Explícamelo Fácil - PEP 2016-2025",
-        "status": "active",
-        "temas_disponibles": list(explicaciones_faciles.keys())
-    })
+    return jsonify({"status": "active", "message": "Modo Explícamelo Fácil funcionando"})
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
     try:
-        # Obtener datos de DialogFlow
+        # Obtener datos de la solicitud
         data = request.get_json()
-        print("📨 Datos recibidos de DialogFlow")
+        print("📨 Datos recibidos")
         
-        # Extraer pregunta
+        # Extraer pregunta de diferentes formatos
         pregunta = ""
         
+        # Formato DialogFlow
         if "queryResult" in data:
             query_result = data["queryResult"]
             if "queryText" in query_result:
@@ -102,103 +45,78 @@ def webhook():
             elif "parameters" in query_result and "any" in query_result["parameters"]:
                 pregunta = query_result["parameters"]["any"]
         
-        # Si no se encuentra en formato DialogFlow, buscar formato directo
+        # Formato directo
+        if not pregunta and "question" in data:
+            pregunta = data["question"]
+        
+        pregunta = pregunta.lower().strip() if pregunta else ""
+        print(f"🔍 Pregunta: '{pregunta}'")
+        
+        # Si no hay pregunta, dar bienvenida
         if not pregunta:
-            pregunta = data.get("question", "")
-        
-        pregunta = pregunta.strip()
-        print(f"🔍 Pregunta a procesar: '{pregunta}'")
-        
-        if not pregunta:
-            # Respuesta de bienvenida al modo
-            response = {
-                "fulfillmentText": "🎓 **Modo Explícamelo Fácil Activado**\n\nPídeme que te explique fácilmente cualquier concepto del PEP de Ingeniería Electrónica.\n\nEjemplo: 'Explícame fácil qué es concebir en CDIO'",
-                "fulfillmentMessages": [
-                    {
-                        "text": {
-                            "text": [
-                                "🎓 **Modo Explícamelo Fácil Activado**\n\nPídeme que te explique fácilmente cualquier concepto del PEP de Ingeniería Electrónica.\n\nEjemplo: 'Explícame fácil qué es concebir en CDIO'"
-                            ]
-                        }
-                    }
-                ]
-            }
-            return jsonify(response)
-        
-        # Detectar si es solicitud de explicación fácil
-        es_modo_facil = any(palabra in pregunta.lower() for palabra in ["explica", "explicame", "facil", "fácil", "simple"])
-        
-        if es_modo_facil:
-            tema_id = detectar_tema_explicacion(pregunta)
-            
-            if tema_id:
-                explicacion = explicaciones_faciles[tema_id]["respuesta"]
-                print(f"✅ Tema detectado: {tema_id}")
-                
-                response = {
-                    "fulfillmentText": explicacion,
-                    "fulfillmentMessages": [
-                        {
-                            "text": {
-                                "text": [explicacion]
-                            }
-                        }
-                    ]
-                }
+            respuesta_texto = (
+                "🎓 **Modo Explícamelo Fácil Activado**\n\n"
+                "Pídeme que te explique fácilmente conceptos del PEP de Ingeniería Electrónica.\n\n"
+                "💡 **Ejemplos**:\n"
+                "'Explícame fácil qué es concebir en CDIO'\n"
+                "'Explica fácil los proyectos CDIO'\n"
+                "'¿Qué son sistemas digitales de forma simple?'"
+            )
+        else:
+            # Buscar tema basado en palabras clave
+            if "concebir" in pregunta:
+                respuesta_texto = explicaciones["concebir"]
+            elif "diseñar" in pregunta:
+                respuesta_texto = explicaciones["diseñar"]
+            elif "proyecto" in pregunta and "cdio" in pregunta:
+                respuesta_texto = explicaciones["proyectos"]
+            elif "sistema digital" in pregunta:
+                respuesta_texto = explicaciones["sistemas_digitales"]
+            elif "telecomunica" in pregunta:
+                respuesta_texto = explicaciones["telecomunicaciones"]
+            elif "automatiza" in pregunta:
+                respuesta_texto = explicaciones["automatizacion"]
+            elif "crédito" in pregunta or "credito" in pregunta:
+                respuesta_texto = explicaciones["creditos"]
+            elif "proyecto grado" in pregunta or "trabajo grado" in pregunta:
+                respuesta_texto = explicaciones["proyecto_grado"]
+            elif "cdio" in pregunta:
+                respuesta_texto = "🔄 **CDIO Completo - Explicado Fácil**\n\nCDIO son 4 fases:\n\n1. 🧠 CONCEBIR: Pensar y planear\n2. 📐 DISEÑAR: Crear planos\n3. 🔨 IMPLEMENTAR: Construir\n4. 🚀 OPERAR: Hacer funcionar\n\n💡 **Es como una receta para ser buen ingeniero: Primero piensas, luego diseñas, después construyes y finalmente haces que funcione.**"
             else:
-                # No se detectó tema específico
-                mensaje = (
+                respuesta_texto = (
                     "🤔 **Modo Explícamelo Fácil**\n\n"
                     "Puedo explicarte fácilmente sobre:\n\n"
-                    "• 🧠 **Fases CDIO**: Concebir, Diseñar\n"
+                    "• 🧠 **CDIO y sus fases**: Concebir, Diseñar\n"
                     "• 🛠️ **Proyectos CDIO**: Cómo funcionan\n"
                     "• 🔢 **Líneas de profundización**: Sistemas Digitales, Telecomunicaciones, Automatización\n"
                     "• 📊 **Estructura académica**: Créditos, Proyecto de grado\n\n"
-                    "¿Sobre cuál quieres que te explique de forma fácil?"
+                    "¿Sobre cuál quieres que te explique?"
                 )
-                
-                response = {
-                    "fulfillmentText": mensaje,
-                    "fulfillmentMessages": [
-                        {
-                            "text": {
-                                "text": [mensaje]
-                            }
-                        }
-                    ]
-                }
-        else:
-            # No es modo fácil, dar instrucciones
-            mensaje = (
-                "💡 **Para usar el Modo Explícamelo Fácil**:\n\n"
-                "Usa frases como:\n"
-                "• 'Explícame fácil qué es CDIO'\n"
-                "• 'Explica fácil las líneas de profundización'\n"
-                "• '¿Qué es concebir en CDIO de forma simple?'"
-            )
-            
-            response = {
-                "fulfillmentText": mensaje,
-                "fulfillmentMessages": [
-                    {
-                        "text": {
-                            "text": [mensaje]
-                        }
-                    }
-                ]
-            }
         
-        print("✅ Respuesta enviada a DialogFlow")
-        return jsonify(response)
-            
-    except Exception as e:
-        print(f"❌ Error en webhook: {e}")
-        error_response = {
-            "fulfillmentText": "⚠️ Lo siento, hubo un error en el modo Explícamelo Fácil. Intenta de nuevo en un momento.",
+        # Crear respuesta en formato DialogFlow
+        response = {
+            "fulfillmentText": respuesta_texto,
             "fulfillmentMessages": [
                 {
                     "text": {
-                        "text": ["⚠️ Lo siento, hubo un error en el modo Explícamelo Fácil. Intenta de nuevo en un momento."]
+                        "text": [respuesta_texto]
+                    }
+                }
+            ]
+        }
+        
+        print("✅ Respuesta enviada exitosamente")
+        return jsonify(response)
+        
+    except Exception as e:
+        print(f"❌ Error: {str(e)}")
+        # Respuesta de error simple
+        error_response = {
+            "fulfillmentText": "⚠️ Error temporal. Por favor, intenta de nuevo.",
+            "fulfillmentMessages": [
+                {
+                    "text": {
+                        "text": ["⚠️ Error temporal. Por favor, intenta de nuevo."]
                     }
                 }
             ]
@@ -206,6 +124,5 @@ def webhook():
         return jsonify(error_response)
 
 if __name__ == "__main__":
-    print("✅ Modo Explícamelo Fácil - Listo en puerto 5000")
-    print("🎓 Especializado en PEP Ingeniería Electrónica")
+    print("✅ Webhook funcionando en puerto 5000")
     app.run(host="0.0.0.0", port=5000, debug=False)
