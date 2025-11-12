@@ -11,6 +11,8 @@ try:
     print("✅ Modelo y vectorizador cargados correctamente.")
 except Exception as e:
     print(f"❌ Error al cargar el modelo o el vectorizador: {e}")
+    modelo = None
+    vectorizador = None
 
 # --- Ruta raíz (para verificar que el servidor esté activo) ---
 @app.route("/", methods=["GET"])
@@ -21,13 +23,16 @@ def home():
 @app.route("/webhook", methods=["POST"])
 def webhook():
     try:
+        if modelo is None or vectorizador is None:
+            return jsonify({"error": "Modelo no cargado en el servidor"}), 500
+
         data = request.get_json()
         if not data or "question" not in data:
             return jsonify({"error": "No se recibió ninguna pregunta"}), 400
 
         question = data["question"]
-        X = vectorizer.transform([question])
-        prediction = model.predict(X)[0]
+        X = vectorizador.transform([question])
+        prediction = modelo.predict(X)[0]
 
         response = {
             "answer": f"Esto es lo que aprendí sobre '{question}': {prediction}"
