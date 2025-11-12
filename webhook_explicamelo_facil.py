@@ -15,7 +15,8 @@ def obtener_modelo():
         vectorizador = joblib.load('vectorizador.joblib')
         print("✅ Modelo y vectorizador cargados desde archivos.")
         return modelo, vectorizador
-    except:
+    except Exception as e:
+        print(f"🔄 No se pudieron cargar los archivos del modelo: {e}")
         print("🔄 Entrenando nuevo modelo...")
         return entrenar_modelo()
 
@@ -51,11 +52,11 @@ def entrenar_modelo():
         t = re.sub(r'[^a-záéíóúñ\s]', '', t)
         return t
 
-    preguntas = [limpiar_texto(p) for p in preguntas]
+    preguntas_limpias = [limpiar_texto(p) for p in preguntas]
 
     # Entrenar modelo
     vectorizador = TfidfVectorizer()
-    X = vectorizador.fit_transform(preguntas)
+    X = vectorizador.fit_transform(preguntas_limpias)
 
     modelo = LogisticRegression(max_iter=1000)
     modelo.fit(X, clases)
@@ -91,6 +92,7 @@ def webhook():
             return jsonify({"error": "No se recibió ninguna pregunta"}), 400
 
         question = data["question"]
+        print(f"📥 Pregunta recibida: {question}")
         
         # Preprocesar la pregunta igual que en entrenamiento
         def limpiar_texto(t):
@@ -101,6 +103,7 @@ def webhook():
         question_limpia = limpiar_texto(question)
         X = vectorizador.transform([question_limpia])
         prediction = modelo.predict(X)[0]
+        print(f"🎯 Predicción: {prediction}")
 
         # Respuestas más informativas
         respuestas = {
