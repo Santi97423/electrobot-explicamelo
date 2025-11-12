@@ -6,8 +6,8 @@ app = Flask(__name__)
 
 # --- Cargar el modelo y el vectorizador entrenados ---
 try:
-    model = joblib.load("modelo_entrenado.pkl")
-    vectorizer = joblib.load("vectorizador.pkl")
+    modelo = joblib.load('modelo_explicamelo_facil.joblib')
+    vectorizador = joblib.load('vectorizador.joblib')
     print("✅ Modelo y vectorizador cargados correctamente.")
 except Exception as e:
     print(f"❌ Error al cargar el modelo o el vectorizador: {e}")
