@@ -2,6 +2,6 @@ services:
   - type: web
     name: explicabot-webhook
     env: python
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "python webhook_explicamelo_facil.py"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python webhook_explicamelo_facil.py
     pythonVersion: 3.11.9
